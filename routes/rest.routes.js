@@ -47,6 +47,7 @@ router.get("/", async (req, res, next) => {
 // GET '/restaurante/:restaurantID' => vista especifica de restaurante
 router.get("/:restId", async (req, res, next) => {
   const { restId } = req.params;
+//   console.log(restId)
   try {
     const response = await Restaurant.findById(restId);
     res.status(201).json(response);
@@ -60,7 +61,10 @@ router.delete("/:restId/delete", isAuthenticated, async (req, res, next) => {
   const { restId } = req.params;
   let userRole = req.payload.role;
   try {
-    if (userRole === "admin" || req.payload._id === Restaurant.owner) {
+    let restaurantID = await Restaurant.findById(restId)
+        
+    let restaurantIdOwner = restaurantID.owner.toString()
+    if (userRole === "admin" || req.payload._id === restaurantIdOwner) {
       await Restaurant.findByIdAndDelete(restId);
       res.status(200).json("Restaurante borrado");
     } else {
@@ -81,14 +85,18 @@ router.patch(
     const { restId } = req.params;
     const { name, location, cuisinType, phoneNumber } = req.body;
     const restUpdate = {
-      name,
-      location,
-      cuisinType,
-      phoneNumber,
-      photos: req.file?.path,
+        name,
+        location,
+        cuisinType,
+        phoneNumber,
+        photos: req.file?.path,
     };
     try {
-      if (userRole === "admin" || req.payload._id === Restaurant.owner) {
+        let restaurantID = await Restaurant.findById(restId)
+        
+        let restaurantIdOwner = restaurantID.owner.toString()
+        
+      if (userRole === "admin" || req.payload._id === restaurantIdOwner) {
         await Restaurant.findByIdAndUpdate(restId, restUpdate);
         res.status(201).json("Restaurante actualizado");
       } else {

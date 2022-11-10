@@ -1,4 +1,4 @@
-const { Schema, model, default: mongoose } = require("mongoose");
+const { Schema, model} = require("mongoose");
 
 const restaurantSchema = new Schema({
   name: {
@@ -28,6 +28,11 @@ const restaurantSchema = new Schema({
       ref: "Carta",
     },
   ],
+  owner:
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
 });
 
 const Restaurant = model("Restaurant", restaurantSchema);

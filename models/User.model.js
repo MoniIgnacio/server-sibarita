@@ -30,12 +30,6 @@ const userSchema = new Schema(
       type: Number,
       required: true,
     },
-    restaurant: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Restaurant",
-      },
-    ],
     reserva: [
       {
         type: Schema.Types.ObjectId,

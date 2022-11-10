@@ -13,12 +13,14 @@ router.post(
   async (req, res, next) => {
     const { name, location, cuisinType, phoneNumber } = req.body;
     let userRole = req.payload.role;
+    let userOnlineId = req.payload._id
     const restaurantCreate = {
       name,
       location,
       cuisinType,
       phoneNumber,
       photos: req.file?.path,
+      owner: userOnlineId
     };
 
     try {
@@ -54,11 +56,11 @@ router.get("/:restId", async (req, res, next) => {
 });
 
 // DELETE '/restaurante/:restaurantID'=> delete especific de restaurante
-router.delete("/:restId", isAuthenticated, async (req, res, next) => {
+router.delete("/:restId/delete", isAuthenticated, async (req, res, next) => {
   const { restId } = req.params;
   let userRole = req.payload.role;
   try {
-    if (userRole === "owner" || userRole === "admin") {
+    if (userRole === "admin" || req.payload._id === Restaurant.owner) {
       await Restaurant.findByIdAndDelete(restId);
       res.status(200).json("Restaurante borrado");
     } else {
@@ -86,7 +88,7 @@ router.patch(
       photos: req.file?.path,
     };
     try {
-      if (userRole === "owner" || userRole === "admin") {
+      if (userRole === "admin" || req.payload._id === Restaurant.owner) {
         await Restaurant.findByIdAndUpdate(restId, restUpdate);
         res.status(201).json("Restaurante actualizado");
       } else {

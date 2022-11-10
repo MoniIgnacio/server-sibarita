@@ -24,6 +24,12 @@ const reservaSchema = new Schema({
       ref: "Restaurant",
     },
   ],
+  user: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 const Reserva = model("Reserva", reservaSchema);

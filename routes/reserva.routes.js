@@ -60,12 +60,12 @@ router.patch("/:reservaId", isAuthenticated, async (req, res, next) => {
     pax,
   };
   try {
-    let commentIdBd = await Comment.findById(commentId);
-    let commentIdStr = commentIdBd._id.toString();
+    let reservaIdBd = await Reserva.findById(reservaId);
+    let reservaIdStr = reservaIdBd.whoReserved.toString();
 
-    if (userRole === "admin" || req.payload._id === commentIdStr) {
-      await Comment.findByIdAndUpdate(commentId, commentUpdate);
-      res.status(201).json("Comment actualizado success");
+    if (userRole === "admin" || req.payload._id === reservaIdStr) {
+      await Reserva.findByIdAndUpdate(reservaId, reservaUpdate);
+      res.status(201).json("Reserva actualizada success");
     } else {
       res.status(401).json("Needs validated user");
     }

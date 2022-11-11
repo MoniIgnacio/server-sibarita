@@ -24,7 +24,7 @@ const reservaSchema = new Schema({
       ref: "Restaurant",
     },
   ],
-  user: [
+  whoReserved: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",

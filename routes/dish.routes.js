@@ -2,31 +2,6 @@ const router = require("express").Router();
 const isAuthenticated = require("../middlewares/auth.middlewares");
 const Dish = require("../models/Dish.model");
 
-//POST "/api/dish/create" => crear una nueva carta
-router.post("/create", isAuthenticated, async (req, res, next) => {
-  const { title, description, price, category } = req.body;
-  let userRole = req.payload.role;
-  let userOnlineId = req.payload._id;
-
-  const dishCreate = {
-    title,
-    description,
-    price,
-    category,
-    owner: userOnlineId,
-  };
-
-  try {
-    if (userRole === "admin" || userRole === "owner") {
-      await Dish.create(dishCreate);
-      res.status(201).json("Dish created successfully");
-    } else {
-      res.status(401).json("Necesita un usuario validado");
-    }
-  } catch (error) {
-    next(error);
-  }
-});
 
 //GET "/api/dish/:dishId" => visualización de la carta
 router.get("/:dishId", async (req, res, next) => {

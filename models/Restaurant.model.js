@@ -22,12 +22,6 @@ const restaurantSchema = new Schema({
     type: Number,
     required: true,
   },
-  carta: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Carta",
-    },
-  ],
   owner:
     {
       type: Schema.Types.ObjectId,

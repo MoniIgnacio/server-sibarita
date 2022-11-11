@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Restaurant = require("../models/Restaurant.model");
+const Reserva = require("../models/Reserva.model");
+const Dish = require("../models/Dish.model");
 const cloudinary = require("../middlewares/cloudinary.js");
 
 const isAuthenticated = require("../middlewares/auth.middlewares");
@@ -109,5 +111,60 @@ router.patch(
     }
   }
 );
+
+// POST '/restaurant/:restId/reserva' => create a new reserva
+router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
+  const { restId } = req.params;
+
+  const { fecha, hour, pax, hasConsumed } = req.body;
+// ! Mirar la Date en como se guarda el formato !
+  const newReserve = {
+    fecha,
+    hour,
+    pax,
+    hasConsumed,
+    restaurant: restId,
+    whoReserved: req.payload._id,
+  };
+  try {
+    await Reserva.create(newReserve);
+    res.status(201).json("Reserva create success");
+  } catch (error) {
+    res.status(401).json("validar usuario");
+    next(error);
+  }
+});
+
+//POST "/api/restaurant/:restId/dish" => crear una nueva carta
+router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
+  const { title, description, price, category } = req.body;
+  const {restId} = req.params
+  let userRole = req.payload.role;
+  let userOnlineId = req.payload._id;
+
+  const dishCreate = {
+    title,
+    description,
+    price,
+    category,
+    restaurant: restId 
+  };
+
+  try {
+
+    let restaurantID = await Restaurant.findById(restId);
+
+    let restaurantOwnerId = restaurantID.owner.toString();
+
+    if (userRole === "admin" || userOnlineId === restaurantOwnerId) {
+      await Dish.create(dishCreate);
+      res.status(201).json("Dish created successfully");
+    } else {
+      res.status(401).json("Necesita un usuario validado");
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

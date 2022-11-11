@@ -14,37 +14,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// POST '/api/comment/create' => create a new comment
-router.post("/create", isAuthenticated, cloudinary.single("comment-img"), async (req, res, next) => {
-  const {
-    comment,
-    serviceScore,
-    foodScore,
-    ambientScore,
-    restaurant,
-  } = req.body;
 
-  let userRole = req.payload.role;
-  const newComment = {
-    comment,
-    photo: req.file?.path,
-    serviceScore,
-    foodScore,
-    ambientScore,
-    user: req.payload._id,
-    // restaurant: ???,
-  };
-//   try {
-//     if (userRole === "owner" || userRole === "admin" && ha reservado en el resta!) {
-//       await Comment.create(newComment);
-//       res.status(201).json("Comment create success");
-//     } else {
-//       res.status(401).json("validar usuario");
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-});
 
 // GET '/comment/:commentId' => vista especifica de Comment
 router.get("/:commentId", async (req, res, next) => {
@@ -64,10 +34,10 @@ router.delete("/:commentId", isAuthenticated, async (req, res, next) => {
   let userRole = req.payload.role;
   try {
     let commentIdBd = await Comment.findById(commentId);
-    let commentIdStr = commentIdBd._id.toString();
+    let commentIdStr = commentIdBd.user.toString();
 
     if (userRole === "admin" || req.payload._id === commentIdStr) {
-      await User.findByIdAndDelete(userId);
+      await Comment.findByIdAndDelete(commentId);
       res.status(200).json("Comment borrado success");
     } else {
       res.status(401).json("Needs a validated user");
@@ -87,8 +57,6 @@ router.patch("/:commentId", isAuthenticated, async (req, res, next) => {
     serviceScore,
     foodScore,
     ambientScore,
-    user,
-    restaurant,
   } = req.body;
 
   const commentUpdate = {
@@ -96,10 +64,11 @@ router.patch("/:commentId", isAuthenticated, async (req, res, next) => {
     photo,
     foodScore,
     ambientScore,
+    serviceScore
   };
   try {
     let commentIdBd = await Comment.findById(commentId);
-    let commentIdStr = commentIdBd._id.toString();
+    let commentIdStr = commentIdBd.user.toString();
 
     if (userRole === "admin" || req.payload._id === commentIdStr) {
       await Comment.findByIdAndUpdate(commentId, commentUpdate);

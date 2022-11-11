@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
-const {isAuthenticated} = require("../middlewares/auth.middlewares");
+const { isAuthenticated } = require("../middlewares/auth.middlewares");
 
 // POST '/api/auth/signup' => ruta de registro de usuario
 router.post("/signup", async (req, res, next) => {
@@ -89,40 +89,42 @@ router.post("/login", async (req, res, next) => {
     return;
   }
 
-try {
-  //User exists
-  const foundUser = await User.findOne({ email: email });
-  if (foundUser === null) {
-    res.status(400).json({ errorMessage: "Credenciales no válidas" });
-    return;
-  }
-  //Correct password
-  const isPasswordValid = await bcrypt.compare(password, foundUser.password);
-  if (isPasswordValid === false) {
-    res.status(400).json({ errorMessage: "Credenciales no válidas" });
-    return
-  }
+  try {
+    //User exists
+    const foundUser = await User.findOne({ email: email });
+    if (foundUser === null) {
+      res.status(400).json({ errorMessage: "Credenciales no válidas" });
+      return;
+    }
+    //Correct password
+    const isPasswordValid = await bcrypt.compare(password, foundUser.password);
+    if (isPasswordValid === false) {
+      res.status(400).json({ errorMessage: "Credenciales no válidas" });
+      return;
+    }
 
-  //Token creation and send it to client
-  const payload = {
-    _id: foundUser._id,
-    email: foundUser.email,
-    role: foundUser.role,
-    username: foundUser.username
-  }
+    //Token creation and send it to client
+    const payload = {
+      _id: foundUser._id,
+      email: foundUser.email,
+      role: foundUser.role,
+      username: foundUser.username,
+    };
 
-  const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {algorithm: "HS256", expiresIn:"3h"})
-  //send the token to the client
-  res.status(200).json({authToken: authToken})
-} catch (error) {
-  next(error);
-}
-})
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "3h",
+    });
+    //send the token to the client
+    res.status(200).json({ authToken: authToken });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // GET "/api/auth/verify" => send to FE the verification of the token
-router.get('/verify', isAuthenticated, (req,res,next) =>{
-  res.status(200).json({user: req.payload})
-})
-
+router.get("/verify", isAuthenticated, (req, res, next) => {
+  res.status(200).json({ user: req.payload });
+});
 
 module.exports = router;

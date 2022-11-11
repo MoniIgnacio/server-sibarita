@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const Reserva = require("../models/Reserva.model");
 const Restaurant = require("../models/Restaurant.model");
-const {isAuthenticated} = require("../middlewares/auth.middlewares");
+const Comment = require("../models/Comment.model")
+const { isAuthenticated } = require("../middlewares/auth.middlewares");
+const cloudinary = require("../middlewares/cloudinary.js");
 
 // GET '/reserva/' => vista all reserva
 router.get("/", async (req, res, next) => {
@@ -78,5 +80,41 @@ router.patch("/:reservaId", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
+
+// POST '/api/reserva/:reservaId/comment' => create a new comment
+router.post(
+  "/:reservaId/comment",
+  isAuthenticated,
+  cloudinary.single("comment-img"),
+  async (req, res, next) => {
+    const { reservaId } = req.params;
+    const { comment, serviceScore, foodScore, ambientScore } =
+      req.body;
+
+    let userRole = req.payload.role;
+   
+    try {
+      let reservaIdBd = await Reserva.findById(reservaId);
+      let restaurantId = reservaIdBd.restaurant.toString();
+      const newComment = {
+        comment,
+        photo: req.file?.path,
+        serviceScore,
+        foodScore,
+        ambientScore,
+        user: req.payload._id,
+        restaurant: restaurantId,
+      };
+      if (userRole === "owner" || userRole === "admin" || reservaIdBd.hasConsumed === true) {
+        await Comment.create(newComment);
+        res.status(201).json("Comment create success");
+      } else {
+        res.status(401).json("validar usuario");
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

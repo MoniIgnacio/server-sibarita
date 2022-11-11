@@ -4,7 +4,7 @@ const Reserva = require("../models/Reserva.model");
 const Dish = require("../models/Dish.model");
 const cloudinary = require("../middlewares/cloudinary.js");
 
-const {isAuthenticated} = require("../middlewares/auth.middlewares");
+const { isAuthenticated } = require("../middlewares/auth.middlewares");
 
 //! Acordarse para revisar los path del cloudinary
 // POST '/api/restaurant/create' => crear nuevo restaurante
@@ -117,7 +117,7 @@ router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
   const { restId } = req.params;
 
   const { fecha, hour, pax, hasConsumed } = req.body;
-// ! Mirar la Date en como se guarda el formato !
+  // ! Mirar la Date en como se guarda el formato !
   const newReserve = {
     fecha,
     hour,
@@ -138,7 +138,7 @@ router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
 //POST "/api/restaurant/:restId/dish" => crear una nueva carta
 router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
   const { title, description, price, category } = req.body;
-  const {restId} = req.params
+  const { restId } = req.params;
   let userRole = req.payload.role;
   let userOnlineId = req.payload._id;
 
@@ -147,11 +147,10 @@ router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
     description,
     price,
     category,
-    restaurant: restId 
+    restaurant: restId,
   };
 
   try {
-
     let restaurantID = await Restaurant.findById(restId);
 
     let restaurantOwnerId = restaurantID.owner.toString();
@@ -166,5 +165,6 @@ router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
+
 
 module.exports = router;

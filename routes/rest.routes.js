@@ -4,7 +4,7 @@ const Reserva = require("../models/Reserva.model");
 const Dish = require("../models/Dish.model");
 const cloudinary = require("../middlewares/cloudinary.js");
 
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated} = require("../middlewares/auth.middlewares");
 
 //! Acordarse para revisar los path del cloudinary
 // POST '/api/restaurant/create' => crear nuevo restaurante

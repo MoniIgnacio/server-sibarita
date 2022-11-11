@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Reserva = require("../models/Reserva.model");
 const Restaurant = require("../models/Restaurant.model");
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated} = require("../middlewares/auth.middlewares");
 
 // GET '/reserva/' => vista all reserva
 router.get("/", async (req, res, next) => {

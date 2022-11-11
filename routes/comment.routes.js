@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Comment = require("../models/Comment.model");
-const isAuthenticated = require("../middlewares/auth.middlewares");
+const {isAuthenticated} = require("../middlewares/auth.middlewares");
 const cloudinary = require("../middlewares/cloudinary.js");
 
 

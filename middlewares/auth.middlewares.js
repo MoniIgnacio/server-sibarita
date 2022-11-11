@@ -29,4 +29,14 @@ const isAuthenticated = jwt({
 })
 
 
-module.exports = isAuthenticated
+const isAdmin = () => {
+  if(req.payload.role !== 'admin'){
+    res.status(401).json('no sos admin')
+
+  }else{
+    next()
+  }
+}
+
+
+module.exports = {isAuthenticated, isAdmin}

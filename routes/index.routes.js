@@ -13,4 +13,7 @@ router.use("/restaurant", restRoutes);
 const userRoutes = require('./user.routes');
 router.use("/user", userRoutes);
 
+const dishRoutes = require("./dish.routes")
+router.use("/dish", dishRoutes)
+
 module.exports = router;

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Reserva = require("../models/Reserva.model");
+const Restaurant = require("../models/Restaurant.model");
 const isAuthenticated = require("../middlewares/auth.middlewares");
-
 
 // GET '/reserva/' => vista all reserva
 router.get("/", async (req, res, next) => {
@@ -48,24 +48,29 @@ router.delete("/:reservaId", isAuthenticated, async (req, res, next) => {
 router.patch("/:reservaId", isAuthenticated, async (req, res, next) => {
   let userRole = req.payload.role;
   const { reservaId } = req.params;
-  const {
-    fecha,
-    hour,
-    pax,
-  } = req.body;
+  const { fecha, hour, pax, hasConsumed } = req.body;
 
-  const reservaUpdate = {
+  const clientUpdate = {
     fecha,
     hour,
     pax,
   };
+
+  const ownerUpdate = {
+    hasConsumed,
+  };
+
   try {
     let reservaIdBd = await Reserva.findById(reservaId);
+    let ownerRestId = await Restaurant.findById(reservaIdBd.restaurant);
+    let ownerRealId = ownerRestId.owner.toString();
     let reservaIdStr = reservaIdBd.whoReserved.toString();
 
     if (userRole === "admin" || req.payload._id === reservaIdStr) {
-      await Reserva.findByIdAndUpdate(reservaId, reservaUpdate);
+      await Reserva.findByIdAndUpdate(reservaId, clientUpdate);
       res.status(201).json("Reserva actualizada success");
+    } else if (userRole === "admin" || req.payload._id === ownerRealId) {
+      await Reserva.findByIdAndUpdate(reservaId, ownerUpdate);
     } else {
       res.status(401).json("Needs validated user");
     }

@@ -16,7 +16,7 @@ const reservaSchema = new Schema({
   },
   hasConsumed: {
     type: Boolean,
-    deafult: false,
+    default: false,
   },
   restaurant: [
     {

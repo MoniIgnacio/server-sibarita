@@ -24,6 +24,13 @@ router.post(
       photos: req.file?.path,
       owner: userOnlineId,
     };
+    console.log(restaurantCreate);
+
+    //BE validations
+    if (name === "" || location === "" || phoneNumber === "") {
+      res.status(400).json({ errorMessage: "Ingresar campos requeridos" });
+      return;
+    }
 
     try {
       if (userRole === "owner" || userRole === "admin") {
@@ -126,6 +133,7 @@ router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
     restaurant: restId,
     whoReserved: req.payload._id,
   };
+  // console.log(newReserve)
   try {
     await Reserva.create(newReserve);
     res.status(201).json("Reserva create success");
@@ -165,6 +173,5 @@ router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
-
 
 module.exports = router;

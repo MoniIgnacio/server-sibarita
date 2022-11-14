@@ -22,4 +22,6 @@ router.use("/comment", commentRoutes)
 const reservaRoutes = require("./reserva.routes")
 router.use("/reserva", reservaRoutes)
 
+const uploadRoutes = require("./upload.routes")
+router.use("/upload", uploadRoutes)
 module.exports = router;

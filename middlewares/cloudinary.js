@@ -21,6 +21,4 @@ const uploader = multer({
     storage
 })
 
-//npm install cloudinary multer multer-storage-cloudinary
-
 module.exports = uploader

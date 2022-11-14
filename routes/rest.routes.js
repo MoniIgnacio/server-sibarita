@@ -11,9 +11,8 @@ const { isAuthenticated } = require("../middlewares/auth.middlewares");
 router.post(
   "/create",
   isAuthenticated,
-  cloudinary.single("restaurant-img"),
   async (req, res, next) => {
-    const { name, location, cuisinType, phoneNumber } = req.body;
+    const { name, location, cuisinType, phoneNumber, photos } = req.body;
     let userRole = req.payload.role;
     let userOnlineId = req.payload._id;
     const restaurantCreate = {
@@ -21,10 +20,9 @@ router.post(
       location,
       cuisinType,
       phoneNumber,
-      photos: req.file?.path,
+      photos: photos,
       owner: userOnlineId,
     };
-    console.log(restaurantCreate);
 
     //BE validations
     if (name === "" || location === "" || phoneNumber === "") {
@@ -87,7 +85,7 @@ router.delete("/:restId", isAuthenticated, async (req, res, next) => {
 
 // PATCH '/restaurant/:restId' => edit especific de restaurante
 router.patch(
-  "/:restId",
+  "/:restId/edit",
   isAuthenticated,
   cloudinary.single("restaurant-img"),
   async (req, res, next) => {

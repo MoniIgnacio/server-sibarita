@@ -57,8 +57,8 @@ router.get("/", async (req, res, next) => {
 
 // GET '/restaurant/:restId' => vista especifica de restaurante
 router.get("/:restId", async (req, res, next) => {
-  const { restId } = req.params;
-  //   console.log(restId)
+  const { restId } = req.params.toString();
+ console.log("Buscando la id", restId)
   try {
     const response = await Restaurant.findById(restId);
     res.status(201).json(response);

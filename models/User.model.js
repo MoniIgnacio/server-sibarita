@@ -30,12 +30,6 @@ const userSchema = new Schema(
       type: Number,
       required: true,
     },
-    reserva: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Reserva",
-      },
-    ],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

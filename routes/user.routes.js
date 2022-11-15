@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
-const {isAuthenticated} = require("../middlewares/auth.middlewares");
+const { isAuthenticated } = require("../middlewares/auth.middlewares");
+const Reserva = require("../models/Reserva.model");
 
 // GET '/user/:userId' => vista especifica de User
 router.get("/:userId", isAuthenticated, async (req, res, next) => {
@@ -45,7 +46,7 @@ router.delete("/:userId", isAuthenticated, async (req, res, next) => {
 router.patch("/:userId", isAuthenticated, async (req, res, next) => {
   let userRole = req.payload.role;
   const { userId } = req.params;
-  const { email, password, password2, username, phoneNumber} = req.body;
+  const { email, password, password2, username, phoneNumber } = req.body;
 
   const userUpdate = {
     username,
@@ -63,6 +64,18 @@ router.patch("/:userId", isAuthenticated, async (req, res, next) => {
       res.status(401).json("Needs validated user");
     }
   } catch (error) {
+    next(error);
+  }
+});
+
+// GET '/user/:userId/reserve' => vista especifica de reserva
+router.get("/:userId/reserve", isAuthenticated, async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const response = await Reserva.find({ whoReserved: `${userId}` });
+    res.status(201).json(response);
+  } catch (error) {
+    res.status(401).json("Needs a validated user");
     next(error);
   }
 });

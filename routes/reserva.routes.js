@@ -15,17 +15,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// GET '/reserva/:reservaId' => vista especifica de reserva
-router.get("/:reservaId", isAuthenticated, async (req, res, next) => {
-  const { reservaId } = req.params;
-  try {
-    const response = await Reserva.findById(reservaId);
-    res.status(201).json(response);
-  } catch (error) {
-    res.status(401).json("Needs a validated user");
-    next(error);
-  }
-});
+
 
 // DELETE '/reserva/:reservaId'=> delete especific reserva
 router.delete("/:reservaId", isAuthenticated, async (req, res, next) => {

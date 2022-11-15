@@ -7,7 +7,7 @@ const reservaSchema = new Schema({
   },
   hour: {
     required: true,
-    type: Date,
+    type: String,
   },
   pax: {
     required: true,

@@ -171,4 +171,17 @@ router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
   }
 });
 
+//GET "/api/restaurant/:restId/alldishes" => visualización de la carta
+router.get("/:restId/alldishes", async (req, res, next) => {
+  const {restId} = req.params
+
+  try {
+    const response = await Dish.find({restaurant: `${restId}`});
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 module.exports = router;

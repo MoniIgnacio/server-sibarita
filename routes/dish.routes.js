@@ -3,7 +3,7 @@ const {isAuthenticated} = require("../middlewares/auth.middlewares");
 const Dish = require("../models/Dish.model");
 
 
-//GET "/api/dish/:dishId" => visualización de la carta
+//GET "/api/dish/:dishId" => visualización de plato especifico
 router.get("/:dishId", async (req, res, next) => {
   const { dishId } = req.params;
 

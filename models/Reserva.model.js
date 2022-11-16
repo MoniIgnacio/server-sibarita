@@ -18,18 +18,16 @@ const reservaSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  restaurant: [
+  restaurant: 
     {
       type: Schema.Types.ObjectId,
       ref: "Restaurant",
     },
-  ],
-  whoReserved: [
+  whoReserved: 
     {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-  ],
 });
 
 const Reserva = model("Reserva", reservaSchema);

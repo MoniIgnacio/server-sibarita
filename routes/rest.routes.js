@@ -130,7 +130,7 @@ router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
     restaurant: restId,
     whoReserved: req.payload._id,
   };
-  // console.log(newReserve)
+ 
   try {
     await Reserva.create(newReserve);
     res.status(201).json("Reserva create success");

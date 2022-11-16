@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User.model");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
 const Reserva = require("../models/Reserva.model");
+const Restaurant = require("../models/Restaurant.model");
 
 // GET '/user/:userId' => vista especifica de User
 router.get("/:userId", isAuthenticated, async (req, res, next) => {
@@ -72,7 +73,7 @@ router.patch("/:userId", isAuthenticated, async (req, res, next) => {
 router.get("/:userId/reserve", isAuthenticated, async (req, res, next) => {
   const { userId } = req.params;
   try {
-    const response = await Reserva.find({ whoReserved: `${userId}` });
+    const response = await Reserva.find({ whoReserved: `${userId}` }).populate("restaurant");
     res.status(201).json(response);
   } catch (error) {
     res.status(401).json("Needs a validated user");

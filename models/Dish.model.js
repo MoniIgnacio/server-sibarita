@@ -20,12 +20,10 @@ const dishSchema = new Schema({
     enum: ["entrante", "principal", "postre"],
     default: "principal",
   },
-  restaurant: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Restaurant",
-    },
-  ],
+  restaurant: {
+    type: Schema.Types.ObjectId,
+    ref: "Restaurant",
+  },
 });
 
 const Dish = model("Dish", dishSchema);

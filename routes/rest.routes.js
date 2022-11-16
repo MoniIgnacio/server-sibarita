@@ -176,7 +176,7 @@ router.get("/:restId/alldishes", async (req, res, next) => {
   const {restId} = req.params
 
   try {
-    const response = await Dish.find({restaurant: `${restId}`});
+    const response = await Dish.find({restaurant: `${restId}`}).populate('restaurant');
     res.status(200).json(response);
   } catch (error) {
     next(error);

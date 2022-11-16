@@ -6,7 +6,6 @@ const cloudinary = require("../middlewares/cloudinary.js");
 
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
 
-//! Acordarse para revisar los path del cloudinary
 // POST '/api/restaurant/create' => crear nuevo restaurante
 router.post(
   "/create",
@@ -46,7 +45,7 @@ router.post(
 // GET '/restaurant' => get info from the restaurants
 router.get("/", async (req, res, next) => {
   try {
-    const response = await Restaurant.find().select("name");
+    const response = await Restaurant.find()
     res.status(200).json(response);
   } catch (error) {
     next(error);
@@ -87,17 +86,18 @@ router.delete("/:restId", isAuthenticated, async (req, res, next) => {
 router.patch(
   "/:restId/edit",
   isAuthenticated,
-  cloudinary.single("restaurant-img"),
   async (req, res, next) => {
     let userRole = req.payload.role;
     const { restId } = req.params;
-    const { name, location, cuisinType, phoneNumber } = req.body;
+    const { name, location, cuisinType, phoneNumber, photos } = req.body;
+    
+    
     const restUpdate = {
       name,
       location,
       cuisinType,
       phoneNumber,
-      photos: req.file?.path,
+      photos,
     };
     try {
       let restaurantID = await Restaurant.findById(restId);

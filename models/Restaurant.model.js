@@ -32,9 +32,11 @@ const restaurantSchema = new Schema({
       "Vegana",
       "Pesquetariana",
       "Asiática",
-      "Mexicana"
+      "Mexicana",
+      "Argentina"
+
     ],
-    default: "spanish",
+    default: "Argentina",
   },
   phoneNumber: {
     type: Number,

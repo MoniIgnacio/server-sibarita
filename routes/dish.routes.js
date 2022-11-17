@@ -1,7 +1,6 @@
 const router = require("express").Router();
-const {isAuthenticated} = require("../middlewares/auth.middlewares");
+const { isAuthenticated } = require("../middlewares/auth.middlewares");
 const Dish = require("../models/Dish.model");
-
 
 //GET "/api/dish/:dishId" => visualización de plato especifico
 router.get("/:dishId", async (req, res, next) => {
@@ -42,9 +41,8 @@ router.delete("/:dishId", isAuthenticated, async (req, res, next) => {
   const { dishId } = req.params;
   let userRole = req.payload.role;
   try {
-    let dishIdDB = await Dish.findById(dishId);
-    let dishOwner = dishIdDB.owner.toString();
-
+    let dishIdDB = await Dish.findById(dishId).populate("restaurant");
+    let dishOwner = dishIdDB.restaurant.owner.toString();
     if (userRole === "admin" || req.payload._id === dishOwner) {
       await Dish.findByIdAndDelete(dishId);
       res.status(200).json("Plato borrado");

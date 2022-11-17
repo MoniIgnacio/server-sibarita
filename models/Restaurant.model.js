@@ -1,4 +1,4 @@
-const { Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const restaurantSchema = new Schema({
   name: {
@@ -15,18 +15,35 @@ const restaurantSchema = new Schema({
   cuisinType: {
     type: String,
     required: true,
-    enum: ["italian", "spanish", "japanese", "chinese"],
+    enum: [
+      "Italiana",
+      "Española",
+      "Japonesa",
+      "China",
+      "Americana",
+      "Tailandesa",
+      "Fusión",
+      "Griega",
+      "Marroquí",
+      "Turca",
+      "India",
+      "Parrilla",
+      "Vegetariana",
+      "Vegana",
+      "Pesquetariana",
+      "Asiática",
+      "Mexicana"
+    ],
     default: "spanish",
   },
   phoneNumber: {
     type: Number,
     required: true,
   },
-  owner:
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 const Restaurant = model("Restaurant", restaurantSchema);

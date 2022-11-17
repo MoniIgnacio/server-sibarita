@@ -121,7 +121,13 @@ router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
   const { restId } = req.params;
 
   const { fecha, hour, pax, hasConsumed } = req.body;
-  // ! Mirar la Date en como se guarda el formato !
+   
+    //BE validations
+    if (fecha === "" || hour === "" || pax === "") {
+      res.status(400).json({ errorMessage: "Ingresar campos requeridos" });
+      return;
+    }
+
   const newReserve = {
     fecha,
     hour,
@@ -146,6 +152,12 @@ router.post("/:restId/dish", isAuthenticated, async (req, res, next) => {
   const { restId } = req.params;
   let userRole = req.payload.role;
   let userOnlineId = req.payload._id;
+
+     //BE validations
+     if (title === "" || description === "" || price === "") {
+      res.status(400).json({ errorMessage: "Todos los campos deben ser completados" });
+      return;
+    }
 
   const dishCreate = {
     title,

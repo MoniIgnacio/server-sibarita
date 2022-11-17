@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const reservaSchema = new Schema({
   fecha: {
     required: true,
-    type: Date,
+    type: String,
   },
   hour: {
     required: true,

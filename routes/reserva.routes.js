@@ -8,7 +8,8 @@ const cloudinary = require("../middlewares/cloudinary.js");
 // GET '/reserva/' => vista all reserva
 router.get("/", async (req, res, next) => {
   try {
-    const response = await Reserva.find();
+    const response = await Reserva.find().populate("whoReserved");
+    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     next(error);

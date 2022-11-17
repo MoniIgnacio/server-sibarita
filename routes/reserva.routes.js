@@ -43,6 +43,17 @@ router.patch("/:reservaId", isAuthenticated, async (req, res, next) => {
   const { reservaId } = req.params;
   const { fecha, hour, pax, hasConsumed } = req.body;
 
+   //BE validations
+   if (fecha === "" || hour === "" || pax === "") {
+    res.status(400).json({ errorMessage: "Ingresar campos requeridos" });
+    return;
+  }
+  if ( pax <= 0 || pax >= 15 ) {
+    res.status(400).json({ errorMessage: "Ingrese cantidad de comensales validos" });
+    return;
+  }
+
+
   const clientUpdate = {
     fecha,
     hour,

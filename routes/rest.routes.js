@@ -127,6 +127,10 @@ router.post("/:restId/reserva", isAuthenticated, async (req, res, next) => {
       res.status(400).json({ errorMessage: "Ingresar campos requeridos" });
       return;
     }
+    if ( pax <= 0 || pax >= 15 ) {
+      res.status(400).json({ errorMessage: "Ingrese cantidad de comensales validos" });
+      return;
+    }
 
   const newReserve = {
     fecha,
